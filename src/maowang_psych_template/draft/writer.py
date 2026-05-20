@@ -76,6 +76,7 @@ class JianyingDraftWriter:
         _load_reference_text_style_interface(inputs.reference_draft_dir or inputs.template_draft_dir)
         _build_tracks(draft, script, inputs, scenes, assets, timing)
         script.save()
+        _patch_illustration_blend_modes(output_dir / "draft_content.json", scenes)
         _patch_meta_info(output_dir / "draft_meta_info.json", project_name, draft_root, output_dir)
 
         draft_content_path = output_dir / "draft_content.json"
@@ -241,11 +242,13 @@ def _build_tracks(
                 clamp_area=ILLUSTRATION_AREA,
             ),
         )
+        _configure_segment_blend_mode(segment, scene.illustration_blend_mode, scene.illustration_opacity)
         illustration_segments.append(segment)
 
     _apply_safe_transitions(draft, illustration_segments)
     for segment in illustration_segments:
         script.add_segment(segment, "illustrations")
+    _log_illustration_blend_summary(scenes)
 
     _add_subtitle_segments(draft, script, inputs, scenes, final_project_duration_us)
 
@@ -389,6 +392,54 @@ def _load_reference_text_style_interface(reference_draft_dir: Path | None) -> No
         "参考草稿文字样式复用接口已预留: {}。当前版本先使用 GUI 字体样式，后续可从参考草稿复制花字/描边/阴影。",
         reference_draft_dir,
     )
+
+
+def _configure_segment_blend_mode(segment: Any, blend_mode: str, opacity: float) -> bool:
+    ok = False
+    for key, value in (("blend_mode", blend_mode), ("source_blend_mode", blend_mode), ("opacity", opacity)):
+        try:
+            setattr(segment, key, value)
+            ok = True
+        except Exception:
+            continue
+    return ok
+
+
+def _patch_illustration_blend_modes(content_path: Path, scenes: list[SceneMatch]) -> None:
+    if not content_path.exists():
+        return
+    try:
+        data = json.loads(content_path.read_text(encoding="utf-8"))
+        mode_by_name = {scene.selected_image: scene.illustration_blend_mode for scene in scenes if scene.selected_image}
+        patched = 0
+        for track in data.get("tracks", []):
+            for seg in track.get("segments", []):
+                path = str(seg.get("material", "") or seg.get("path", ""))
+                filename = Path(path).name if path else ""
+                mode = mode_by_name.get(filename)
+                if not mode:
+                    continue
+                seg["blend_mode"] = mode
+                seg["source_blend_mode"] = mode
+                seg["opacity"] = 1.0
+                patched += 1
+        content_path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+        logger.info("插图混合模式 JSON patch 完成，patched={}", patched)
+    except Exception:
+        logger.exception("插图混合模式 JSON patch 失败")
+
+
+def _log_illustration_blend_summary(scenes: list[SceneMatch]) -> None:
+    for scene in scenes:
+        if not scene.selected_image:
+            continue
+        logger.info(
+            "分镜 {} 插图融合结果: file={}, blend={}, opacity={}",
+            scene.storyboard.scene_id,
+            scene.selected_image,
+            scene.illustration_blend_mode,
+            scene.illustration_opacity,
+        )
 
 
 def _add_subtitle_segments(

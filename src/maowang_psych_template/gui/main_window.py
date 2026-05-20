@@ -33,6 +33,7 @@ from ..bailian_client import BailianClient
 from ..config import AppConfig, load_config, save_config
 from ..logging_config import log_dir, setup_logging
 from ..models import GenerationInputs
+from ..models import ILLUSTRATION_MODE_DARKEN, ILLUSTRATION_MODE_ORIGINAL, ILLUSTRATION_MODE_REMOVE_WHITE
 from ..pipeline import GenerationPipeline
 
 
@@ -180,11 +181,16 @@ class MainWindow(QMainWindow):
         self.illustration_max_width_spin = self._spin_box(100, 1600)
         self.illustration_max_height_spin = self._spin_box(100, 900)
         self.logo_max_size_spin = self._spin_box(20, 300)
+        self.illustration_fusion_combo = QComboBox()
+        self.illustration_fusion_combo.addItem("原图 + 变暗混合模式（推荐）", ILLUSTRATION_MODE_DARKEN)
+        self.illustration_fusion_combo.addItem("自动去白底 PNG", ILLUSTRATION_MODE_REMOVE_WHITE)
+        self.illustration_fusion_combo.addItem("原图不处理", ILLUSTRATION_MODE_ORIGINAL)
         form.addRow("顶部标题", self.title_text_edit)
         form.addRow("顶部右侧提示文字", self.hint_text_edit)
         form.addRow("Logo 最大尺寸", self.logo_max_size_spin)
         form.addRow("插图最大宽度", self.illustration_max_width_spin)
         form.addRow("插图最大高度", self.illustration_max_height_spin)
+        form.addRow("插图融合方式", self.illustration_fusion_combo)
         root.addWidget(style_group)
 
         position_group = QGroupBox("位置微调")
@@ -457,6 +463,7 @@ class MainWindow(QMainWindow):
         self.hint_y_spin.setValue(self.config.hint_y)
         self.illustration_center_x_spin.setValue(self.config.illustration_center_x)
         self.illustration_center_y_spin.setValue(self.config.illustration_center_y)
+        self._set_combo_by_data(self.illustration_fusion_combo, self.config.illustration_fusion_mode, ILLUSTRATION_MODE_DARKEN)
         self.divider_center_x_spin.setValue(self.config.divider_center_x)
         self.divider_center_y_spin.setValue(self.config.divider_center_y)
         self.subtitle_center_x_spin.setValue(self.config.subtitle_center_x)
@@ -524,6 +531,7 @@ class MainWindow(QMainWindow):
             "hint_y": self.hint_y_spin.value(),
             "subtitle_center_x": self.subtitle_center_x_spin.value(),
             "subtitle_center_y": self.subtitle_center_y_spin.value(),
+            "illustration_fusion_mode": str(self.illustration_fusion_combo.currentData()),
         }
         for prefix in ("title", "hint", "subtitle"):
             values.update(self._font_values(prefix))

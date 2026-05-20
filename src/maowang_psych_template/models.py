@@ -3,6 +3,11 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 
+ILLUSTRATION_BLEND_DARKEN = "darken"
+ILLUSTRATION_BLEND_NORMAL = "normal"
+ILLUSTRATION_MODE_DARKEN = "original_darken"
+ILLUSTRATION_MODE_REMOVE_WHITE = "remove_white_png"
+ILLUSTRATION_MODE_ORIGINAL = "original"
 
 @dataclass(slots=True)
 class StoryboardRow:
@@ -34,6 +39,8 @@ class SceneMatch:
     match_score: float
     selected_image: str | None = None
     processed_image_path: Path | None = None
+    illustration_blend_mode: str = ILLUSTRATION_BLEND_NORMAL
+    illustration_opacity: float = 1.0
     transition: str | None = None
     warnings: list[str] = field(default_factory=list)
 
@@ -98,6 +105,7 @@ class GenerationInputs:
     subtitle_stroke_color: str = "#FFFFFF"
     subtitle_stroke_width: float = 40.0
     subtitle_shadow_enabled: bool = False
+    illustration_fusion_mode: str = ILLUSTRATION_MODE_DARKEN
 
 
 def ms_to_seconds(ms: int) -> float:
