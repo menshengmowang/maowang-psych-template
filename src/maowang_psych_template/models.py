@@ -5,6 +5,7 @@ from pathlib import Path
 
 ILLUSTRATION_BLEND_DARKEN = "darken"
 ILLUSTRATION_BLEND_NORMAL = "normal"
+ILLUSTRATION_MODE_PRECOMPOSE_DARKEN = "precompose_darken"
 ILLUSTRATION_MODE_DARKEN = "original_darken"
 ILLUSTRATION_MODE_REMOVE_WHITE = "remove_white_png"
 ILLUSTRATION_MODE_ORIGINAL = "original"
@@ -105,7 +106,7 @@ class GenerationInputs:
     subtitle_stroke_color: str = "#FFFFFF"
     subtitle_stroke_width: float = 40.0
     subtitle_shadow_enabled: bool = False
-    illustration_fusion_mode: str = ILLUSTRATION_MODE_DARKEN
+    illustration_fusion_mode: str = ILLUSTRATION_MODE_PRECOMPOSE_DARKEN
 
 
 def ms_to_seconds(ms: int) -> float:

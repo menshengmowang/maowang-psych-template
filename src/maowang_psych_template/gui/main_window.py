@@ -33,7 +33,12 @@ from ..bailian_client import BailianClient
 from ..config import AppConfig, load_config, save_config
 from ..logging_config import log_dir, setup_logging
 from ..models import GenerationInputs
-from ..models import ILLUSTRATION_MODE_DARKEN, ILLUSTRATION_MODE_ORIGINAL, ILLUSTRATION_MODE_REMOVE_WHITE
+from ..models import (
+    ILLUSTRATION_MODE_DARKEN,
+    ILLUSTRATION_MODE_ORIGINAL,
+    ILLUSTRATION_MODE_PRECOMPOSE_DARKEN,
+    ILLUSTRATION_MODE_REMOVE_WHITE,
+)
 from ..pipeline import GenerationPipeline
 
 
@@ -182,7 +187,8 @@ class MainWindow(QMainWindow):
         self.illustration_max_height_spin = self._spin_box(100, 900)
         self.logo_max_size_spin = self._spin_box(20, 300)
         self.illustration_fusion_combo = QComboBox()
-        self.illustration_fusion_combo.addItem("原图 + 变暗混合模式（推荐）", ILLUSTRATION_MODE_DARKEN)
+        self.illustration_fusion_combo.addItem("软件预合成变暗效果（推荐）", ILLUSTRATION_MODE_PRECOMPOSE_DARKEN)
+        self.illustration_fusion_combo.addItem("原图 + 剪映变暗混合模式（实验）", ILLUSTRATION_MODE_DARKEN)
         self.illustration_fusion_combo.addItem("自动去白底 PNG", ILLUSTRATION_MODE_REMOVE_WHITE)
         self.illustration_fusion_combo.addItem("原图不处理", ILLUSTRATION_MODE_ORIGINAL)
         form.addRow("顶部标题", self.title_text_edit)
@@ -463,7 +469,11 @@ class MainWindow(QMainWindow):
         self.hint_y_spin.setValue(self.config.hint_y)
         self.illustration_center_x_spin.setValue(self.config.illustration_center_x)
         self.illustration_center_y_spin.setValue(self.config.illustration_center_y)
-        self._set_combo_by_data(self.illustration_fusion_combo, self.config.illustration_fusion_mode, ILLUSTRATION_MODE_DARKEN)
+        self._set_combo_by_data(
+            self.illustration_fusion_combo,
+            self.config.illustration_fusion_mode,
+            ILLUSTRATION_MODE_PRECOMPOSE_DARKEN,
+        )
         self.divider_center_x_spin.setValue(self.config.divider_center_x)
         self.divider_center_y_spin.setValue(self.config.divider_center_y)
         self.subtitle_center_x_spin.setValue(self.config.subtitle_center_x)

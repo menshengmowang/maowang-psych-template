@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import cv2
 import numpy as np
 from loguru import logger
 from PIL import Image
@@ -23,7 +22,30 @@ def remove_white_background(image_path: Path, output_dir: Path) -> Path:
         return fallback_path
 
 
+def precompose_darken(image_path: Path, output_dir: Path, background_hex: str = "#F4F4F4") -> Path:
+    output_dir.mkdir(parents=True, exist_ok=True)
+    output_path = output_dir / f"{image_path.stem}_darken.png"
+    bg_rgb = _hex_to_rgb(background_hex)
+    image = Image.open(image_path).convert("RGBA")
+    rgba = np.array(image)
+    base_rgb = rgba[:, :, :3]
+    darkened = np.minimum(base_rgb, np.array(bg_rgb, dtype=np.uint8).reshape(1, 1, 3))
+    output_rgba = rgba.copy()
+    output_rgba[:, :, :3] = darkened
+    Image.fromarray(output_rgba, mode="RGBA").save(output_path)
+    logger.info("预合成变暗完成: {} -> {}", image_path, output_path)
+    return output_path
+
+
+def _hex_to_rgb(hex_color: str) -> tuple[int, int, int]:
+    value = hex_color.strip().lstrip("#")
+    if len(value) != 6:
+        raise ValueError(f"无效颜色值: {hex_color}")
+    return tuple(int(value[i : i + 2], 16) for i in (0, 2, 4))
+
+
 def _remove_background_impl(image_path: Path, output_path: Path) -> None:
+    import cv2
     image = Image.open(image_path).convert("RGBA")
     rgba = np.array(image)
     rgb = rgba[:, :, :3].astype(np.float32)
@@ -71,6 +93,7 @@ def _remove_background_impl(image_path: Path, output_path: Path) -> None:
 
 
 def _edge_connected_mask(mask: np.ndarray) -> np.ndarray:
+    import cv2
     label_count, labels = cv2.connectedComponents(mask, connectivity=8)
     if label_count <= 1:
         return np.zeros_like(mask, dtype=np.uint8)

@@ -13,12 +13,13 @@ from .config import AppConfig, cache_path
 from .draft import DraftGenerationResult, JianyingDraftWriter
 from .excel_reader import read_storyboard_excel
 from .image_matcher import MatchCache, match_images_for_scenes
-from .image_processor import remove_white_background
+from .image_processor import precompose_darken, remove_white_background
 from .models import (
     GenerationInputs,
     ILLUSTRATION_BLEND_DARKEN,
     ILLUSTRATION_BLEND_NORMAL,
     ILLUSTRATION_MODE_DARKEN,
+    ILLUSTRATION_MODE_PRECOMPOSE_DARKEN,
     ILLUSTRATION_MODE_ORIGINAL,
     ILLUSTRATION_MODE_REMOVE_WHITE,
 )
@@ -79,6 +80,8 @@ class GenerationPipeline:
         self.emit(f"匹配报告已输出: {report_path}")
         mode = inputs.illustration_fusion_mode
         self.emit(f"插图融合方式: {mode}")
+        if mode == ILLUSTRATION_MODE_DARKEN:
+            self.emit("提示: 当前剪映版本可能不识别原图+变暗混合模式，推荐使用软件预合成变暗。")
         processed_dir = Path.cwd() / "processed_images"
         for scene in scenes:
             if not scene.selected_image:
@@ -87,12 +90,16 @@ class GenerationPipeline:
             source_path = inputs.image_dir / scene.selected_image
             use_original = True
             did_remove = False
-            blend_set_ok = True
             blend_mode = ILLUSTRATION_BLEND_NORMAL
+            precompose_done = False
             if mode == ILLUSTRATION_MODE_REMOVE_WHITE:
                 scene.processed_image_path = remove_white_background(source_path, processed_dir)
                 use_original = False
                 did_remove = True
+            elif mode == ILLUSTRATION_MODE_PRECOMPOSE_DARKEN:
+                scene.processed_image_path = precompose_darken(source_path, processed_dir, "#F4F4F4")
+                use_original = False
+                precompose_done = True
             else:
                 scene.processed_image_path = source_path
             if mode == ILLUSTRATION_MODE_DARKEN:
@@ -100,8 +107,9 @@ class GenerationPipeline:
             scene.illustration_blend_mode = blend_mode
             scene.illustration_opacity = 1.0
             self.emit(
-                f"插图 {scene.storyboard.scene_id}: 融合={mode}, 原图={use_original}, 去白底={did_remove}, "
-                f"blend设置成功={blend_set_ok}, blend值={blend_mode}, opacity=100%"
+                f"插图 {scene.storyboard.scene_id}: 插图融合方式={mode}, 原始图片路径={source_path}, "
+                f"预合成输出路径={scene.processed_image_path}, 是否执行去白底={did_remove}, "
+                f"是否引用原图={use_original}, 剪映混合模式={blend_mode}, 预合成变暗已完成={precompose_done}"
             )
 
         self.emit("生成剪映原生草稿目录...")
@@ -138,6 +146,12 @@ class GenerationPipeline:
                     "match_score": scene.match_score,
                     "selected_image": scene.selected_image,
                     "illustration_fusion_mode": inputs.illustration_fusion_mode,
+                    "illustration_fusion_mode_label": (
+                        "软件预合成变暗效果" if inputs.illustration_fusion_mode == ILLUSTRATION_MODE_PRECOMPOSE_DARKEN
+                        else "原图 + 剪映变暗混合模式（实验）" if inputs.illustration_fusion_mode == ILLUSTRATION_MODE_DARKEN
+                        else "自动去白底 PNG" if inputs.illustration_fusion_mode == ILLUSTRATION_MODE_REMOVE_WHITE
+                        else "原图不处理"
+                    ),
                     "illustration_blend_mode": scene.illustration_blend_mode,
                     "subtitle_indices": [subtitle.index for subtitle in scene.subtitles],
                     "subtitle_text": "\n".join(subtitle.text for subtitle in scene.subtitles),
