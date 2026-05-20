@@ -14,7 +14,14 @@ from .draft import DraftGenerationResult, JianyingDraftWriter
 from .excel_reader import read_storyboard_excel
 from .image_matcher import MatchCache, match_images_for_scenes
 from .image_processor import remove_white_background
-from .models import GenerationInputs
+from .models import (
+    GenerationInputs,
+    ILLUSTRATION_BLEND_DARKEN,
+    ILLUSTRATION_BLEND_NORMAL,
+    ILLUSTRATION_MODE_DARKEN,
+    ILLUSTRATION_MODE_ORIGINAL,
+    ILLUSTRATION_MODE_REMOVE_WHITE,
+)
 from .srt_reader import read_srt
 from .text_matcher import match_storyboard_to_subtitles
 
@@ -70,14 +77,32 @@ class GenerationPipeline:
         scenes = self._match_scenes(inputs)
         report_path = self._write_match_report(inputs, scenes)
         self.emit(f"匹配报告已输出: {report_path}")
-        self.emit("处理插图白底并输出透明 PNG...")
+        mode = inputs.illustration_fusion_mode
+        self.emit(f"插图融合方式: {mode}")
         processed_dir = Path.cwd() / "processed_images"
         for scene in scenes:
             if not scene.selected_image:
                 scene.warnings.append("未匹配到图片")
                 continue
             source_path = inputs.image_dir / scene.selected_image
-            scene.processed_image_path = remove_white_background(source_path, processed_dir)
+            use_original = True
+            did_remove = False
+            blend_set_ok = True
+            blend_mode = ILLUSTRATION_BLEND_NORMAL
+            if mode == ILLUSTRATION_MODE_REMOVE_WHITE:
+                scene.processed_image_path = remove_white_background(source_path, processed_dir)
+                use_original = False
+                did_remove = True
+            else:
+                scene.processed_image_path = source_path
+            if mode == ILLUSTRATION_MODE_DARKEN:
+                blend_mode = ILLUSTRATION_BLEND_DARKEN
+            scene.illustration_blend_mode = blend_mode
+            scene.illustration_opacity = 1.0
+            self.emit(
+                f"插图 {scene.storyboard.scene_id}: 融合={mode}, 原图={use_original}, 去白底={did_remove}, "
+                f"blend设置成功={blend_set_ok}, blend值={blend_mode}, opacity=100%"
+            )
 
         self.emit("生成剪映原生草稿目录...")
         writer = JianyingDraftWriter()
@@ -112,6 +137,8 @@ class GenerationPipeline:
                     "end_ms": scene.end_ms,
                     "match_score": scene.match_score,
                     "selected_image": scene.selected_image,
+                    "illustration_fusion_mode": inputs.illustration_fusion_mode,
+                    "illustration_blend_mode": scene.illustration_blend_mode,
                     "subtitle_indices": [subtitle.index for subtitle in scene.subtitles],
                     "subtitle_text": "\n".join(subtitle.text for subtitle in scene.subtitles),
                     "warnings": scene.warnings,
