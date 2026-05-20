@@ -1,0 +1,32 @@
+[project]
+name = "maowang-psych-template"
+version = "0.1.0"
+description = "Windows desktop tool for generating Jianying Pro psychology template drafts."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "PySide6>=6.6",
+    "pandas>=2.0",
+    "openpyxl>=3.1",
+    "srt>=3.5",
+    "pysrt>=1.1",
+    "Pillow>=10.0",
+    "opencv-python>=4.8",
+    "numpy>=1.24",
+    "requests>=2.31",
+    "loguru>=0.7",
+    "pyJianYingDraft>=0.2.6",
+    "mutagen>=1.47",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+]
+
+[project.scripts]
+maowang-psych-template = "maowang_psych_template.app:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

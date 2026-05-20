@@ -1,0 +1,433 @@
+{
+  "created_at": "2026-05-19T19:59:57",
+  "excel_path": "D:\\X心理\\原创\\懂事之人的寂静疲惫\\抖音心理赛道-爆款分镜脚本-懂事的寂静疲惫.xlsx",
+  "srt_path": "D:\\X心理\\原创\\懂事之人的寂静疲惫\\我终于承认.srt",
+  "image_dir": "D:\\X心理\\原创\\懂事之人的寂静疲惫\\懂事之人的寂静疲惫",
+  "summary": {
+    "scene_count": 25,
+    "matched_image_count": 25,
+    "low_text_score_count": 0
+  },
+  "scenes": [
+    {
+      "scene_id": "分镜1",
+      "row_number": 2,
+      "script": "我终于承认了，我累了。",
+      "flow_prompt_en": "A minimalist black stick figure sitting dejectedly on a white floor, neon red and blue glowing shadows, paper texture background, wide shot, 16:9",
+      "start_ms": 0,
+      "end_ms": 1770,
+      "match_score": 1.0,
+      "selected_image": "A_minimalist_black_stick_figure_202605191454.jpeg",
+      "subtitle_indices": [
+        1,
+        2
+      ],
+      "subtitle_text": "我终于承认了\n我累了",
+      "warnings": []
+    },
+    {
+      "scene_id": "分镜2",
+      "row_number": 3,
+      "script": "这种累，不是那种睡一觉就能好的体力消耗，",
+      "flow_prompt_en": "A minimalist black stick figure lying in bed, covered by heavy neon red and blue glowing boulders, paper texture, 16:9",
+      "start_ms": 1770,
+      "end_ms": 4415,
+      "match_score": 1.0,
+      "selected_image": "Stick_figure_in_bed_boulders_202605191454.jpeg",
+      "subtitle_indices": [
+        3,
+        4
+      ],
+      "subtitle_text": "这种累\n不是那种睡一觉就能好的体力消耗",
+      "warnings": []
+    },
+    {
+      "scene_id": "分镜3",
+      "row_number": 4,
+      "script": "而是一种……从骨子里透出来的寂静疲惫。",
+      "flow_prompt_en": "Close up of a minimalist black stick figure body with glowing red and blue neon cracks, minimalist line art, 16:9",
+      "start_ms": 4415,
+      "end_ms": 7317,
+      "match_score": 1.0,
+      "selected_image": "Minimalist_stick_figure_body_cracks_202605191454.jpeg",
+      "subtitle_indices": [
+        5
+      ],
+      "subtitle_text": "而是一种从骨子里透出来的寂静疲惫",
+      "warnings": []
+    },
+    {
+      "scene_id": "分镜4",
+      "row_number": 5,
+      "script": "你有没有过这样的时刻？在所有人眼里，你都是那个最“懂事”的人。",
+      "flow_prompt_en": "A minimalist black stick figure wearing a glowing neon red smile mask, standing in a crowd of other stick figures, clean lines, 16:9",
+      "start_ms": 7317,
+      "end_ms": 10901,
+      "match_score": 1.0,
+      "selected_image": "Stick_figure_wearing_mask_crowd_202605191454.jpeg",
+      "subtitle_indices": [
+        6,
+        7,
+        8
+      ],
+      "subtitle_text": "你有没有过这样的时刻\n在所有人眼里\n你都是那个最懂事的人",
+      "warnings": []
+    },
+    {
+      "scene_id": "分镜5",
+      "row_number": 6,
+      "script": "你情绪稳定，你工作靠谱，",
+      "flow_prompt_en": "A black stick figure juggling many glowing neon blue balls, organized but tiring, clean vector art, 16:9",
+      "start_ms": 10901,
+      "end_ms": 12607,
+      "match_score": 1.0,
+      "selected_image": "Black_stick_figure_juggling_neon…_202605191454.jpeg",
+      "subtitle_indices": [
+        9,
+        10
+      ],
+      "subtitle_text": "你情绪稳定\n你工作靠谱",
+      "warnings": []
+    },
+    {
+      "scene_id": "分镜6",
+      "row_number": 7,
+      "script": "你从不给人添麻烦。",
+      "flow_prompt_en": "A minimalist black stick figure walking carefully on a glowing neon red thin wire, balancing, paper texture, 16:9",
+      "start_ms": 12607,
+      "end_ms": 13653,
+      "match_score": 1.0,
+      "selected_image": "Stick_figure_walking_on_wire_202605191454.jpeg",
+      "subtitle_indices": [
+        11
+      ],
+      "subtitle_text": "你从不给人添麻烦",
+      "warnings": []
+    },
+    {
+      "scene_id": "分镜7",
+      "row_number": 8,
+      "script": "甚至连拒绝别人，你都要在心里打好几遍草稿，",
+      "flow_prompt_en": "A black stick figure surrounded by floating neon red and blue speech bubbles, chaotic feeling, solid white background, 16:9",
+      "start_ms": 13653,
+      "end_ms": 16725,
+      "match_score": 1.0,
+      "selected_image": "Black_stick_figure_floating_spee…_202605191454.jpeg",
+      "subtitle_indices": [
+        12,
+        13
+      ],
+      "subtitle_text": "甚至连拒绝别人\n你都要在心里打好几遍草稿",
+      "warnings": []
+    },
+    {
+      "scene_id": "分镜8",
+      "row_number": 9,
+      "script": "生怕那句“不”字，会破坏好不容易维持的体面。",
+      "flow_prompt_en": "A minimalist black stick figure trying to say \"NO\", the letters \"NO\" shattering into glowing neon pieces, clean lines, 16:9",
+      "start_ms": 16725,
+      "end_ms": 19882,
+      "match_score": 0.944,
+      "selected_image": "A_minimalist_black_stick_figure_202605191454_2.jpeg",
+      "subtitle_indices": [
+        14,
+        15
+      ],
+      "subtitle_text": "生怕那个不字\n会破坏好不容易维持的体面",
+      "warnings": []
+    },
+    {
+      "scene_id": "分镜9",
+      "row_number": 10,
+      "script": "可是，只有你自己知道，为了维持这份“懂事”，",
+      "flow_prompt_en": "Split screen, one side a glowing mask, other side a crying small stick figure with neon blue tears, 16:9",
+      "start_ms": 19882,
+      "end_ms": 22719,
+      "match_score": 1.0,
+      "selected_image": "Glowing_mask_crying_stick_figure_202605191454.jpeg",
+      "subtitle_indices": [
+        16,
+        17,
+        18
+      ],
+      "subtitle_text": "可是\n只有你自己知道\n为了维持这份懂事",
+      "warnings": []
+    },
+    {
+      "scene_id": "分镜10",
+      "row_number": 11,
+      "script": "你杀死了多少个真实的自己。",
+      "flow_prompt_en": "A minimalist black stick figure standing among many translucent, faded glowing outlines of stick figures on the floor, 16:9",
+      "start_ms": 22719,
+      "end_ms": 24597,
+      "match_score": 1.0,
+      "selected_image": "Black_stick_figure_among_outlines_202605191454.jpeg",
+      "subtitle_indices": [
+        19
+      ],
+      "subtitle_text": "你杀死了多少个真实的自己",
+      "warnings": []
+    },
+    {
+      "scene_id": "分镜11",
+      "row_number": 12,
+      "script": "你习惯了观察每个人的脸色。",
+      "flow_prompt_en": "A small black stick figure being watched by many giant glowing neon red and blue eyes on the wall, psychological pressure, 16:9",
+      "start_ms": 24597,
+      "end_ms": 26197,
+      "match_score": 1.0,
+      "selected_image": "Stick_figure_watched_by_eyes_202605191454.jpeg",
+      "subtitle_indices": [
+        20
+      ],
+      "subtitle_text": "你习惯了观察每个人的脸色",
+      "warnings": []
+    },
+    {
+      "scene_id": "分镜12",
+      "row_number": 13,
+      "script": "饭桌上，你总是那个照顾所有人胃口的人；",
+      "flow_prompt_en": "A minimalist black stick figure handing out glowing neon hearts to others, its own hands empty, clean vector, 16:9",
+      "start_ms": 26197,
+      "end_ms": 28927,
+      "match_score": 1.0,
+      "selected_image": "Stick_figure_handing_out_hearts_202605191454.jpeg",
+      "subtitle_indices": [
+        21,
+        22
+      ],
+      "subtitle_text": "饭桌上\n你总是那个照顾所有人胃口的人",
+      "warnings": []
+    },
+    {
+      "scene_id": "分镜13",
+      "row_number": 14,
+      "script": "合照时，你总是那个主动往边上站的人；",
+      "flow_prompt_en": "A group of stick figures, the main one standing at the far edge, fading into the white background, neon accents, 16:9",
+      "start_ms": 28927,
+      "end_ms": 31530,
+      "match_score": 1.0,
+      "selected_image": "Stick_figures_fading_into_backgr…_202605191454.jpeg",
+      "subtitle_indices": [
+        23,
+        24
+      ],
+      "subtitle_text": "合照时\n你总是那个主动往边上站的人",
+      "warnings": []
+    },
+    {
+      "scene_id": "分镜14",
+      "row_number": 15,
+      "script": "冲突时，你总是那个第一个道歉、第一个妥协的人。",
+      "flow_prompt_en": "Two stick figures in conflict, the main one bowing deeply, wrapped in neon red glowing chains, paper texture, 16:9",
+      "start_ms": 31530,
+      "end_ms": 34709,
+      "match_score": 1.0,
+      "selected_image": "Stick_figures_conflict_bowing_ch…_202605191454.jpeg",
+      "subtitle_indices": [
+        25,
+        26
+      ],
+      "subtitle_text": "冲突时\n你总是那个第一个道歉、第一个妥协的人",
+      "warnings": []
+    },
+    {
+      "scene_id": "分镜15",
+      "row_number": 16,
+      "script": "别人夸你“真懂事”，可你听着却想哭。",
+      "flow_prompt_en": "Giant glowing neon speech bubble crushing a small black stick figure, high contrast, minimalist, 16:9",
+      "start_ms": 34709,
+      "end_ms": 37013,
+      "match_score": 1.0,
+      "selected_image": "Giant_speech_bubble_crushing_sti…_202605191454.jpeg",
+      "subtitle_indices": [
+        27,
+        28
+      ],
+      "subtitle_text": "别人夸你真懂事\n可你听着却想哭",
+      "warnings": []
+    },
+    {
+      "scene_id": "分镜16",
+      "row_number": 17,
+      "script": "因为你知道，所谓的“懂事”，其实是你在童年时，为了换取一点点关注和安全感，而被迫学会的生存技能。",
+      "flow_prompt_en": "A tiny child stick figure facing a giant looming neon red shadow, psychological atmosphere, 16:9",
+      "start_ms": 37013,
+      "end_ms": 43776,
+      "match_score": 1.0,
+      "selected_image": "Child_facing_neon_shadow_202605191454.jpeg",
+      "subtitle_indices": [
+        29,
+        30,
+        31,
+        32,
+        33
+      ],
+      "subtitle_text": "因为你知道\n所谓的懂事\n其实是你在童年时\n为了换取一点点关注和安全感\n而被迫学会的生存技能",
+      "warnings": []
+    },
+    {
+      "scene_id": "分镜17",
+      "row_number": 18,
+      "script": "那个时候，只要你乖，爸爸妈妈就会笑；",
+      "flow_prompt_en": "A small stick figure dancing for two giant glowing neon silhouettes, staged feeling, 16:9",
+      "start_ms": 43776,
+      "end_ms": 46186,
+      "match_score": 1.0,
+      "selected_image": "Stick_figure_dancing_neon_silhou…_202605191454.jpeg",
+      "subtitle_indices": [
+        34,
+        35,
+        36
+      ],
+      "subtitle_text": "那个时候\n只要你乖\n爸爸妈妈就会笑",
+      "warnings": []
+    },
+    {
+      "scene_id": "分镜18",
+      "row_number": 19,
+      "script": "只要你听话，家里就会少一点争吵。",
+      "flow_prompt_en": "A small stick figure covering its ears, background with red and blue neon lightning bolts, dramatic, 16:9",
+      "start_ms": 46186,
+      "end_ms": 48383,
+      "match_score": 1.0,
+      "selected_image": "Stick_figure_covering_ears_neon_202605191454.jpeg",
+      "subtitle_indices": [
+        37,
+        38
+      ],
+      "subtitle_text": "只要你听话\n家里就会少一点争吵",
+      "warnings": []
+    },
+    {
+      "scene_id": "分镜19",
+      "row_number": 20,
+      "script": "于是，你把“照顾别人的情绪”当成了自己的使命。",
+      "flow_prompt_en": "A minimalist black stick figure carrying a giant glowing neon blue globe on its back, heavy burden, 16:9",
+      "start_ms": 48383,
+      "end_ms": 51861,
+      "match_score": 1.0,
+      "selected_image": "Stick_figure_carrying_glowing_globe_202605191454.jpeg",
+      "subtitle_indices": [
+        39,
+        40
+      ],
+      "subtitle_text": "于是\n你把照顾别人的情绪当成了自己的使命",
+      "warnings": []
+    },
+    {
+      "scene_id": "分镜20",
+      "row_number": 21,
+      "script": "你活成了一个巨大的容器，承装着所有人的垃圾，却唯独没有地方安放自己的委屈。",
+      "flow_prompt_en": "A stick figure with a hollow body filled with chaotic glowing neon wires and trash, psychological art, 16:9",
+      "start_ms": 51861,
+      "end_ms": 56832,
+      "match_score": 1.0,
+      "selected_image": "A_stick_figure_with_a_202605191454.jpeg",
+      "subtitle_indices": [
+        41,
+        42,
+        43
+      ],
+      "subtitle_text": "你活成了一个巨大的容器\n承装着所有人的垃圾\n却唯独没有地方安放自己的委屈",
+      "warnings": []
+    },
+    {
+      "scene_id": "分镜21",
+      "row_number": 22,
+      "script": "你照顾了所有人，那谁来照顾你呢？当你在深夜里崩溃到想撞墙，却还要把哭声调到静音的时候，",
+      "flow_prompt_en": "A minimalist stick figure hitting a glowing wall in total darkness, quiet impact, neon red highlights, 16:9",
+      "start_ms": 56832,
+      "end_ms": 62805,
+      "match_score": 1.0,
+      "selected_image": "Stick_figure_crashes_glowing_wall_202605191454.jpeg",
+      "subtitle_indices": [
+        44,
+        45,
+        46,
+        47
+      ],
+      "subtitle_text": "你照顾了所有人\n那谁来照顾你呢\n当你在深夜里崩溃到想撞墙\n却还要把哭声调到静音的时候",
+      "warnings": []
+    },
+    {
+      "scene_id": "分镜22",
+      "row_number": 23,
+      "script": "当你明明满心疮痍，却还要在第二天醒来后，对着镜子练习那个“情绪稳定”的笑容时，你有没有问过那个住在心底的小孩：你疼吗？",
+      "flow_prompt_en": "An adult stick figure hugging a small glowing child stick figure, neon blue and red aura, emotional, 16:9",
+      "start_ms": 62805,
+      "end_ms": 70783,
+      "match_score": 1.0,
+      "selected_image": "Adult_hugging_child_stick_figure_202605191454.jpeg",
+      "subtitle_indices": [
+        48,
+        49,
+        50,
+        51,
+        52
+      ],
+      "subtitle_text": "当你明明满心疮痍\n却还要在第二天醒来后\n对着镜子练习那个情绪稳定的笑容时\n你有没有问过那个住在\n心底的小孩：你疼吗",
+      "warnings": []
+    },
+    {
+      "scene_id": "分镜23",
+      "row_number": 24,
+      "script": "够了。真的够了。从今天起，我允许自己不被喜欢。我允许自己搞砸一些事情，允许自己自私一点，允许自己不再扮演那个“完美”的容器。",
+      "flow_prompt_en": "A stick figure pushing away masks, walking into an open space with a neon orange and blue gradient sky, 16:9",
+      "start_ms": 70783,
+      "end_ms": 79701,
+      "match_score": 1.0,
+      "selected_image": "A_stick_figure_pushing_away_202605191454.jpeg",
+      "subtitle_indices": [
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59
+      ],
+      "subtitle_text": "够了\n真的够了\n从今天起\n我允许自己不被喜欢\n我允许自己搞砸一些事情\n允许自己自私一点\n允许自己不再扮演那个完美的容器",
+      "warnings": []
+    },
+    {
+      "scene_id": "分镜24",
+      "row_number": 25,
+      "script": "我要把那些讨好别人的力气收回来，去喂养那个已经枯萎了很久的自我。如果不被爱是真实，那我也要在这个真实里，挺直腰板，大口呼吸。",
+      "flow_prompt_en": "A stick figure putting a glowing neon orb into its own chest, body lighting up brilliantly, paper texture, 16:9",
+      "start_ms": 79701,
+      "end_ms": 87146,
+      "match_score": 0.95,
+      "selected_image": "Stick_figure_putting_orb_chest_202605191454.jpeg",
+      "subtitle_indices": [
+        60,
+        61,
+        62,
+        63,
+        64
+      ],
+      "subtitle_text": "我要把那些讨好别人的力气收回来\n去喂养那个已经枯萎了很久的自我\n如果不被爱是真实\n那我也要在这个真实里\n挺直腰板",
+      "warnings": []
+    },
+    {
+      "scene_id": "分镜25",
+      "row_number": 26,
+      "script": "你可以说我变了，可以说我不再懂事。但我知道，我终于，找回了我自己。",
+      "flow_prompt_en": "A confident black stick figure walking towards many glowing stars, strong neon red and blue backlighting, 16:9",
+      "start_ms": 87146,
+      "end_ms": 91820,
+      "match_score": 0.927,
+      "selected_image": "Black_stick_figure_walking_towar…_202605191454.jpeg",
+      "subtitle_indices": [
+        65,
+        66,
+        67,
+        68,
+        69,
+        70
+      ],
+      "subtitle_text": "大口呼吸\n你可以说我变了\n可以说我不再懂事\n但我知道\n我终于\n找回了我自己",
+      "warnings": []
+    }
+  ]
+}

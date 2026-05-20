@@ -1,0 +1,2 @@
+[console_scripts]
+maowang-psych-template = maowang_psych_template.app:main
