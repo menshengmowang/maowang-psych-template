@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import difflib
 from typing import Any
 
 from loguru import logger
@@ -92,18 +93,19 @@ class MainWindow(QMainWindow):
         root = QVBoxLayout(central)
 
         title = QLabel("魔王心理学模板")
-        title.setStyleSheet("font-size: 24px; font-weight: 700;")
+        title.setStyleSheet("font-size: 26px; font-weight: 700;")
         root.addWidget(title)
+        subtitle = QLabel("心理学模板剪映草稿生成器")
+        subtitle.setStyleSheet("font-size: 14px; color: #666;")
+        root.addWidget(subtitle)
 
         self._init_position_spins()
 
         tabs = QTabWidget()
         tabs.addTab(self._scroll_page(self._build_input_group()), "基础输入")
-        tabs.addTab(self._scroll_page(self._build_api_group()), "AI 匹配")
-        tabs.addTab(self._scroll_page(self._build_layout_tab()), "版式设置")
-        tabs.addTab(self._scroll_page(self._build_font_style_tab()), "字体样式")
-        tabs.addTab(self._scroll_page(self._build_advanced_tab()), "高级设置")
-        tabs.addTab(self._build_run_log_tab(), "运行日志")
+        tabs.addTab(self._scroll_page(self._build_layout_tab()), "画面样式")
+        tabs.addTab(self._build_run_log_tab(), "生成草稿")
+        tabs.addTab(self._build_log_tab(), "日志")
         root.addWidget(tabs, 1)
 
         self.setCentralWidget(central)
@@ -126,7 +128,7 @@ class MainWindow(QMainWindow):
         self.image_dir_edit = self._path_row(grid, 3, "图片文件夹", "dir", "")
         self.logo_edit = self._path_row(grid, 4, "Logo 图片", "file", "图片 (*.png *.jpg *.jpeg *.webp *.bmp)")
         self.background_edit = self._path_row(grid, 5, "背景图（可选）", "file", "图片 (*.png *.jpg *.jpeg *.webp *.bmp)")
-        self.divider_edit = self._path_row(grid, 6, "黑色分割线图片（可选）", "file", "图片 (*.png *.jpg *.jpeg *.webp *.bmp)")
+        self.divider_edit = self._path_row(grid, 6, "黑色分割线图片", "file", "图片 (*.png *.jpg *.jpeg *.webp *.bmp)")
         self.draft_dir_edit = self._path_row(grid, 7, "剪映草稿目录", "dir", "")
         self.output_name_edit = QLineEdit()
         grid.addWidget(QLabel("输出草稿名（可选）"), 8, 0)
@@ -172,9 +174,6 @@ class MainWindow(QMainWindow):
         form = QFormLayout(style_group)
         self.title_text_edit = QLineEdit()
         self.hint_text_edit = QLineEdit()
-        self.divider_height_combo = QComboBox()
-        for height in (8, 12, 16, 20):
-            self.divider_height_combo.addItem(f"{height}px", height)
         self.illustration_max_width_spin = self._spin_box(100, 1600)
         self.illustration_max_height_spin = self._spin_box(100, 900)
         self.logo_max_size_spin = self._spin_box(20, 300)
@@ -183,7 +182,6 @@ class MainWindow(QMainWindow):
         form.addRow("Logo 最大尺寸", self.logo_max_size_spin)
         form.addRow("插图最大宽度", self.illustration_max_width_spin)
         form.addRow("插图最大高度", self.illustration_max_height_spin)
-        form.addRow("分割线高度", self.divider_height_combo)
         root.addWidget(style_group)
 
         position_group = QGroupBox("位置微调")
@@ -258,6 +256,7 @@ class MainWindow(QMainWindow):
             self.clear_log_button,
         ]
         for button in self.action_buttons:
+            button.setMinimumHeight(40)
             action_layout.addWidget(button)
         action_layout.addStretch(1)
         root.addLayout(action_layout)
@@ -412,7 +411,7 @@ class MainWindow(QMainWindow):
         filter_text: str,
     ) -> QLineEdit:
         edit = QLineEdit()
-        button = QPushButton("浏览")
+        button = QPushButton("选择")
         button.clicked.connect(lambda: self._browse_path(edit, mode, filter_text))
         layout.addWidget(QLabel(label), row, 0)
         layout.addWidget(edit, row, 1)
@@ -426,8 +425,11 @@ class MainWindow(QMainWindow):
             path, _ = QFileDialog.getOpenFileName(self, "选择文件", edit.text(), filter_text)
         if path:
             edit.setText(path)
+            if edit is self.excel_edit:
+                self._auto_fill_from_excel(Path(path))
 
     def _load_config_to_ui(self) -> None:
+        self.resize(self.config.window_width, self.config.window_height)
         self.api_key_edit.setText(self.config.api_key)
         self.endpoint_edit.setText(self.config.bailian_endpoint)
         self.model_edit.setText(self.config.bailian_model)
@@ -435,12 +437,14 @@ class MainWindow(QMainWindow):
         self.title_text_edit.setText(self.config.title_text)
         self.hint_text_edit.setText(self.config.hint_text)
         self.reference_draft_edit.setText(self.config.reference_draft_dir)
+        self.logo_edit.setText(self.config.last_logo_path)
+        self.background_edit.setText(self.config.last_background_path)
+        self.divider_edit.setText(self.config.last_divider_path)
 
         self.logo_max_size_spin.setValue(self.config.logo_max_size)
         self.illustration_max_width_spin.setValue(self.config.illustration_max_width)
         self.illustration_max_height_spin.setValue(self.config.illustration_max_height)
-        self._set_combo_by_data(self.divider_height_combo, self.config.divider_height, 16)
-
+        
         self.logo_x_spin.setValue(self.config.logo_x)
         self.logo_y_spin.setValue(self.config.logo_y)
         self.title_x_spin.setValue(self.config.title_x)
@@ -493,7 +497,6 @@ class MainWindow(QMainWindow):
 
     def _layout_values(self) -> dict[str, Any]:
         values: dict[str, Any] = {
-            "divider_height": int(self.divider_height_combo.currentData()),
             "divider_center_x": self.divider_center_x_spin.value(),
             "divider_center_y": self.divider_center_y_spin.value(),
             "logo_x": self.logo_x_spin.value(),
@@ -537,6 +540,11 @@ class MainWindow(QMainWindow):
             title_text=self.title_text_edit.text().strip() or "魔王心理学",
             hint_text=self.hint_text_edit.text().strip() or "看懂关系，也看懂自己",
             reference_draft_dir=self.reference_draft_edit.text().strip(),
+            last_logo_path=self.logo_edit.text().strip(),
+            last_background_path=self.background_edit.text().strip(),
+            last_divider_path=self.divider_edit.text().strip(),
+            window_width=self.width(),
+            window_height=self.height(),
             **self._layout_values(),
         )
 
@@ -638,7 +646,7 @@ class MainWindow(QMainWindow):
             image_dir=required_path(self.image_dir_edit, "图片文件夹", True),
             logo_path=logo_path,
             background_path=optional_path(self.background_edit, "背景图") if require_generation_assets else None,
-            divider_path=optional_path(self.divider_edit, "黑色分割线图片") if require_generation_assets else None,
+            divider_path=required_path(self.divider_edit, "黑色分割线图片") if require_generation_assets else None,
             draft_dir=draft_dir,
             output_name=self.output_name_edit.text().strip(),
             title_text=self.title_text_edit.text().strip() or "魔王心理学",
@@ -694,6 +702,68 @@ class MainWindow(QMainWindow):
 
     def _open_path(self, path: Path) -> None:
         QDesktopServices.openUrl(QUrl.fromLocalFile(str(path.resolve())))
+
+
+    def _build_log_tab(self) -> QWidget:
+        page = QWidget()
+        root = QVBoxLayout(page)
+        log_tip = QLabel("日志已在“生成草稿”页实时显示；可使用下方按钮复制或清空。")
+        root.addWidget(log_tip)
+        return page
+
+    def _auto_fill_from_excel(self, excel_path: Path) -> None:
+        folder = excel_path.parent
+        stem = excel_path.stem
+        self._append_log(f"自动匹配：Excel 所在目录 {folder}")
+        self.output_name_edit.setText(stem)
+
+        def best(paths, exts_label):
+            if not paths:
+                return None, f"未找到{exts_label}"
+            if len(paths) == 1:
+                return paths[0], f"仅找到一个{exts_label}"
+            scored = sorted(paths, key=lambda p: difflib.SequenceMatcher(None, stem.lower(), p.stem.lower()).ratio(), reverse=True)
+            if scored:
+                top = scored[0]
+                if len(scored) == 1 or difflib.SequenceMatcher(None, stem.lower(), top.stem.lower()).ratio() > 0:
+                    return top, "按文件名相似度最高"
+            latest = max(paths, key=lambda p: p.stat().st_mtime)
+            return latest, "相似度无法区分，按最新修改时间"
+
+        srt_candidates = [p for p in folder.iterdir() if p.suffix.lower() == '.srt']
+        self._append_log('SRT 候选: ' + ', '.join(p.name for p in srt_candidates) if srt_candidates else 'SRT 候选: 无')
+        srt, reason = best(srt_candidates, 'SRT')
+        if srt:
+            self.srt_edit.setText(str(srt))
+            self._append_log(f"自动选择 SRT: {srt.name}（{reason}）")
+
+        audio_candidates = [p for p in folder.iterdir() if p.suffix.lower() in {'.wav','.mp3','.m4a','.aac'}]
+        self._append_log('音频候选: ' + ', '.join(p.name for p in audio_candidates) if audio_candidates else '音频候选: 无')
+        audio, reason = best(audio_candidates, '音频')
+        if audio:
+            self.audio_edit.setText(str(audio))
+            self._append_log(f"自动选择音频: {audio.name}（{reason}）")
+
+        image_candidates = [p for p in folder.iterdir() if p.suffix.lower() in {'.png','.jpg','.jpeg','.webp'}]
+        divider_keywords = ['分割线','黑线','横线','divider','line']
+        divider = next((p for p in image_candidates if any(k in p.stem.lower() for k in divider_keywords)), None)
+        if divider:
+            self.divider_edit.setText(str(divider))
+            self._append_log(f"自动选择黑色分割线图片: {divider.name}（关键词匹配）")
+        else:
+            self._append_log('未找到黑色分割线图片，需要手动选择')
+
+        bg = next((p for p in image_candidates if any(k in p.stem.lower() for k in ['背景','background','bg'])), None)
+        if bg:
+            self.background_edit.setText(str(bg))
+            self._append_log(f"自动选择背景图: {bg.name}")
+        else:
+            self._append_log('未找到背景图，保持为空')
+
+        if not self.logo_edit.text().strip() and getattr(self.config, 'last_logo_path', ''):
+            self.logo_edit.setText(self.config.last_logo_path)
+
+        self._append_log('需要手动选择：图片文件夹（必填）')
 
     def _append_log(self, message: str) -> None:
         self.log_view.append(message)

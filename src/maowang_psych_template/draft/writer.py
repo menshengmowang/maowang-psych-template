@@ -25,7 +25,6 @@ DEFAULT_BACKGROUND_COLOR = "#F4F4F4"
 SAFE_TRANSITION_NAMES = ["叠化", "模糊", "推近", "拉远"]
 CLAMP_TOLERANCE_US = 1_000_000
 ILLUSTRATION_AREA = (240, 130, 1680, 760)
-DIVIDER_COLOR = "#000000"
 
 
 @dataclass(slots=True)
@@ -268,9 +267,10 @@ def _prepare_assets(
 
     divider_dir = asset_dir / "divider"
     divider_dir.mkdir(parents=True, exist_ok=True)
-    divider_height = _normalize_divider_height(inputs.divider_height)
-    divider = divider_dir / f"divider_{VIDEO_WIDTH}x{divider_height}.png"
-    _render_divider(inputs.divider_path, divider, divider_height)
+    if inputs.divider_path is None:
+        raise ValueError("请上传黑色分割线图片")
+    divider = divider_dir / "divider_1920w.png"
+    _render_divider(inputs.divider_path, divider)
 
     subtitle_dir = asset_dir / "subtitles"
     subtitle_dir.mkdir(parents=True, exist_ok=True)
@@ -308,27 +308,11 @@ def _render_background(source: Path | None, target: Path) -> None:
     logger.info("背景层素材生成成功: {}", target)
 
 
-def _render_divider(source: Path | None, target: Path, height: int) -> None:
-    height = _normalize_divider_height(height)
-    if source:
-        with Image.open(source).convert("RGBA") as image:
-            image = image.resize((VIDEO_WIDTH, height), Image.Resampling.LANCZOS)
-            image.save(target)
-        color = "自定义图片"
-    else:
-        Image.new("RGBA", (VIDEO_WIDTH, height), (0, 0, 0, 255)).save(target)
-        color = DIVIDER_COLOR
-    logger.info(
-        "分割线素材生成成功: path={}, width={}, height={}, color={}",
-        target,
-        VIDEO_WIDTH,
-        height,
-        color,
-    )
-
-
-def _normalize_divider_height(height: int) -> int:
-    return min(max(int(height or 16), 8), 20)
+def _render_divider(source: Path, target: Path) -> None:
+    with Image.open(source).convert("RGBA") as image:
+        resized = image.resize((VIDEO_WIDTH, image.height), Image.Resampling.LANCZOS)
+        resized.save(target)
+    logger.info("分割线素材生成成功: path={}, width={}, height={}, source={}", target, VIDEO_WIDTH, resized.height, source)
 
 
 def _write_normalized_srt(scenes: list[SceneMatch], target: Path) -> None:
