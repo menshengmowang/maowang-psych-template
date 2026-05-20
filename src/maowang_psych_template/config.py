@@ -107,7 +107,7 @@ class AppConfig:
     subtitle_stroke_color: str = "#FFFFFF"
     subtitle_stroke_width: float = 40.0
     subtitle_shadow_enabled: bool = False
-    illustration_fusion_mode: str = "original_darken"
+    illustration_fusion_mode: str = "precompose_darken"
 
 
 LAYOUT_FIELD_NAMES = {
