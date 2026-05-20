@@ -54,10 +54,14 @@ class AppConfig:
     bailian_endpoint: str = DEFAULT_BAILIAN_ENDPOINT
     bailian_model: str = DEFAULT_BAILIAN_MODEL
     draft_dir: str = str(default_draft_dir())
+    last_logo_path: str = ""
+    last_background_path: str = ""
+    last_divider_path: str = ""
+    window_width: int = 1280
+    window_height: int = 900
     title_text: str = "魔王心理学"
     hint_text: str = "看懂关系，也看懂自己"
     reference_draft_dir: str = ""
-    divider_height: int = 16
     divider_center_x: int = 960
     divider_center_y: int = 810
     logo_x: int = 70
@@ -106,7 +110,6 @@ class AppConfig:
 
 
 LAYOUT_FIELD_NAMES = {
-    "divider_height",
     "divider_center_x",
     "divider_center_y",
     "logo_x",

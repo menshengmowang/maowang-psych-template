@@ -53,7 +53,6 @@ class GenerationInputs:
     title_text: str = "魔王心理学"
     hint_text: str = "看懂关系，也看懂自己"
     reference_draft_dir: Path | None = None
-    divider_height: int = 16
     divider_center_x: int = 960
     divider_center_y: int = 810
     logo_x: int = 70
