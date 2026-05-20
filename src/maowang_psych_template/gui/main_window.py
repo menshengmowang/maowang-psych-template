@@ -103,7 +103,10 @@ class MainWindow(QMainWindow):
 
         tabs = QTabWidget()
         tabs.addTab(self._scroll_page(self._build_input_group()), "基础输入")
+        tabs.addTab(self._scroll_page(self._build_api_group()), "AI 匹配")
         tabs.addTab(self._scroll_page(self._build_layout_tab()), "画面样式")
+        tabs.addTab(self._scroll_page(self._build_font_style_tab()), "字体样式")
+        tabs.addTab(self._scroll_page(self._build_advanced_tab()), "高级设置")
         tabs.addTab(self._build_run_log_tab(), "生成草稿")
         tabs.addTab(self._build_log_tab(), "日志")
         root.addWidget(tabs, 1)
@@ -430,16 +433,17 @@ class MainWindow(QMainWindow):
 
     def _load_config_to_ui(self) -> None:
         self.resize(self.config.window_width, self.config.window_height)
-        self.api_key_edit.setText(self.config.api_key)
-        self.endpoint_edit.setText(self.config.bailian_endpoint)
-        self.model_edit.setText(self.config.bailian_model)
-        self.draft_dir_edit.setText(self.config.draft_dir)
-        self.title_text_edit.setText(self.config.title_text)
-        self.hint_text_edit.setText(self.config.hint_text)
-        self.reference_draft_edit.setText(self.config.reference_draft_dir)
-        self.logo_edit.setText(self.config.last_logo_path)
-        self.background_edit.setText(self.config.last_background_path)
-        self.divider_edit.setText(self.config.last_divider_path)
+
+        self._safe_set_line_edit("api_key_edit", self.config.api_key)
+        self._safe_set_line_edit("endpoint_edit", self.config.bailian_endpoint)
+        self._safe_set_line_edit("model_edit", self.config.bailian_model)
+        self._safe_set_line_edit("draft_dir_edit", self.config.draft_dir)
+        self._safe_set_line_edit("title_text_edit", self.config.title_text)
+        self._safe_set_line_edit("hint_text_edit", self.config.hint_text)
+        self._safe_set_line_edit("reference_draft_edit", self.config.reference_draft_dir)
+        self._safe_set_line_edit("logo_edit", self.config.last_logo_path)
+        self._safe_set_line_edit("background_edit", self.config.last_background_path)
+        self._safe_set_line_edit("divider_edit", self.config.last_divider_path)
 
         self.logo_max_size_spin.setValue(self.config.logo_max_size)
         self.illustration_max_width_spin.setValue(self.config.illustration_max_width)
@@ -460,6 +464,14 @@ class MainWindow(QMainWindow):
 
         for prefix in ("title", "hint", "subtitle"):
             self._load_font_style_to_ui(prefix)
+
+
+    def _safe_set_line_edit(self, attr_name: str, value: str) -> None:
+        widget = getattr(self, attr_name, None)
+        if isinstance(widget, QLineEdit):
+            widget.setText(value)
+        else:
+            logger.warning("控件 %s 不存在或不是 QLineEdit，跳过配置回填", attr_name)
 
     def _load_font_style_to_ui(self, prefix: str) -> None:
         getattr(self, f"{prefix}_font_name_edit").setText(getattr(self.config, f"{prefix}_font_name"))
